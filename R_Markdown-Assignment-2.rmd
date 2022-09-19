@@ -1,0 +1,55 @@
+---
+title: "ANA 515 Assignment 2"
+author: Jun Yong Lee
+date: 9/18/2022
+output: 
+  html_document:
+    theme:
+      bootswatch: darkly
+---
+  
+The dataset conveys the number of births in the US from 1994 to 2014 by year, month, date of month, and day of week. The first portion of US births from 1994 to 2003 is collected and provided by the Centers for Disease Control and Prevention's National Center for Health Statistics. Another portion of US births ranging from 2000 to 2014 is provided by the Social Security Administration. Through these sets of data which will be combined, we hope to establish numerous findings, such as the trends of number of births throughout the 20 year range. The data is in a flat file (CSV) format.
+
+```{r, echo = TRUE}
+#downloaded tidyverse, knitr, and bslib from Tools menu
+```
+
+```{r, include = TRUE}
+library(tidyverse)
+library(knitr)
+library(bslib)
+```
+
+```{r, include = TRUE}
+url1 <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_1994-2003_CDC_NCHS.csv"
+births_1 <- read.csv(url1)
+```
+
+```{r, include = TRUE}
+url2 <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
+births_2 <- read.csv(url2)
+#For both datasets, I used the R function read.scv to read the data into R. 
+```
+
+```{r, include = TRUE}
+births_1_upto1999 <- filter(births_1, year<2000)
+```
+
+```{r, include= TRUE}
+births <- rbind(births_1_upto1999, births_2)
+```
+
+This dataframe has `r nrow(births)` rows and `r ncol(births)` columns The names of the columns and a brief 
+description of each are in the table below:
+
+```{r, include=TRUE}
+knitr::kable(head(births[, 1:2]), "simple")
+```
+
+The year and month columns note the year and the month of the number of births.
+
+```{r, include=TRUE}
+births_subset <- births %>% select(year, month, births)
+summary(births_subset)
+sum(is.na(births_subset))
+```
